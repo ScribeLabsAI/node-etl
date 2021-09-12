@@ -16,6 +16,6 @@ class JSONParser<T> extends Transform {
   }
 }
 
-export function fromJSON<T>(): Transform {
-  return new JSONParser<T>();
+export function fromJSON<T>(): JSONParser<T> {
+  return new JSONParser();
 }

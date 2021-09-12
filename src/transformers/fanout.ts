@@ -24,6 +24,6 @@ class Fanout<T> extends Transform {
   }
 }
 
-export function fanout<T>(outputs: Writable[]): Transform {
-  return new Fanout<T>(outputs);
+export function fanout<T>(outputs: Writable[]): Fanout<T> {
+  return new Fanout(outputs);
 }

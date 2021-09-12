@@ -16,6 +16,6 @@ class ConsoleWriter extends Transform {
   }
 }
 
-export function toConsole(): Transform {
+export function toConsole(): ConsoleWriter {
   return new ConsoleWriter();
 }

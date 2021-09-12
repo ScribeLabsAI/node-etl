@@ -29,6 +29,6 @@ class Collector<T> extends Transform {
   }
 }
 
-export function collect<T>(batchSize: number): Transform {
-  return new Collector<T>(batchSize);
+export function collect<T>(batchSize: number): Collector<T> {
+  return new Collector(batchSize);
 }

@@ -16,6 +16,6 @@ class JSONWriter<T> extends Transform {
   }
 }
 
-export function toJSON<T>(): Transform {
-  return new JSONWriter<T>();
+export function toJSON<T>(): JSONWriter<T> {
+  return new JSONWriter();
 }
