@@ -1,9 +1,9 @@
-import { Readable } from 'node:stream';
+import { Extractor } from './extractor';
 
-class FromIterable<T> extends Readable {
-  iterable: Iterable<T>;
+class FromIterable<T> extends Extractor<T> {
+  readonly iterable: Iterable<T>;
   constructor(iterable: Iterable<T>) {
-    super({ objectMode: true, encoding: 'utf8' });
+    super();
     this.iterable = iterable;
   }
 

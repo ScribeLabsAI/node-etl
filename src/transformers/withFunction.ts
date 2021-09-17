@@ -1,19 +1,16 @@
-import { Transform } from 'node:stream';
+import { Transformer } from './transformer';
 
 import type { TransformCallback } from 'node:stream';
 
-class WithFunction<T, U> extends Transform {
-  transformer: (arg: T) => U;
+class WithFunction<T, U> extends Transformer<T, U> {
+  readonly transformer: (arg: T) => U;
 
   constructor(transformer: (arg: T) => U) {
-    super({
-      objectMode: true,
-      decodeStrings: false,
-    });
+    super();
     this.transformer = transformer;
   }
 
-  override _transform(chunk: T, _: BufferEncoding, callback: TransformCallback) {
+  override _transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {
     this.push(this.transformer(chunk));
     callback();
   }

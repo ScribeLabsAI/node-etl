@@ -1,19 +1,16 @@
-import { Transform } from 'node:stream';
+import { Transformer } from './transformer';
 
 import type { TransformCallback, Writable } from 'node:stream';
 
-class Fanout<T> extends Transform {
+class Fanout<T> extends Transformer<T, T> {
   readonly outputs: Writable[];
 
   constructor(outputs: Writable[]) {
-    super({
-      objectMode: true,
-      decodeStrings: false,
-    });
+    super();
     this.outputs = outputs;
   }
 
-  override _transform(chunk: T, _: BufferEncoding, callback: TransformCallback) {
+  override _transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {
     this.outputs.forEach((o) => o.write(chunk));
     callback();
   }

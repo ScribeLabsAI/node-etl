@@ -1,16 +1,13 @@
-import { Transform } from 'node:stream';
+import { Transformer } from './transformer';
 
 import type { TransformCallback } from 'node:stream';
 
-class JSONWriter<T> extends Transform {
+class JSONWriter<T> extends Transformer<T, string> {
   constructor() {
-    super({
-      objectMode: true,
-      decodeStrings: false,
-    });
+    super();
   }
 
-  override _transform(chunk: T, _: BufferEncoding, callback: TransformCallback) {
+  override _transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {
     this.push(JSON.stringify(chunk));
     callback();
   }

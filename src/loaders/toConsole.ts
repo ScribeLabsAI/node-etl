@@ -1,21 +1,20 @@
-import { Transform } from 'node:stream';
+import { Loader } from './loader';
 
-import type { TransformCallback } from 'node:stream';
-
-class ConsoleWriter extends Transform {
+class ConsoleWriter<T> extends Loader<T> {
   constructor() {
-    super({
-      objectMode: true,
-      decodeStrings: false,
-    });
+    super();
   }
 
-  override _transform(chunk: unknown, _: BufferEncoding, callback: TransformCallback) {
+  override _write(
+    chunk: T,
+    _encoding: BufferEncoding,
+    callback: (error?: Error | null) => void
+  ): void {
     console.log(chunk);
     callback();
   }
 }
 
-export function toConsole(): ConsoleWriter {
+export function toConsole<T>(): ConsoleWriter<T> {
   return new ConsoleWriter();
 }
