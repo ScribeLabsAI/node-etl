@@ -3,4 +3,5 @@ export * from './fanout';
 export * from './fromJSON';
 export * from './toCSVLine';
 export * from './toJSON';
+export * from './transformer';
 export * from './withFunction';
