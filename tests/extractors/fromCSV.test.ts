@@ -1,17 +1,25 @@
 import { describe, expect, test } from '@jest/globals';
 import { resolve } from 'node:path';
+import { finished } from 'node:stream/promises';
 
-import { ETL, fromCSV } from '../../src';
+import ETL, { counter, fromCSV } from '../../src';
 
-import type { Readable } from 'node:stream';
+type AddressesCSV = {
+  Firstname: string;
+  Lastname: string;
+  Address: string;
+  Town: string;
+  State: string;
+  Postcode: string;
+};
 
 describe('loading a CSV', function () {
   test('it loads a CSV file and counts the entries', async () => {
-    const pipeline = new ETL().extract(fromCSV(resolve('tests', 'assets', 'addresses.csv')));
-    let count = 0;
-    for await (const _ of pipeline.start() as Readable) {
-      count++;
-    }
-    expect(count).toEqual(6);
+    const count = counter<AddressesCSV>();
+    const pipeline = ETL.extract(
+      fromCSV<AddressesCSV>(resolve('tests', 'assets', 'addresses.csv'))
+    ).chain(count);
+    await finished(pipeline);
+    expect(count.getCount()).toEqual(6);
   });
 });
