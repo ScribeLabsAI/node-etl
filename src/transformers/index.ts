@@ -1,5 +1,6 @@
 export * from './collect';
 export * from './fanout';
+export * from './fromCSV';
 export * from './fromJSON';
 export * from './limit';
 export * from './throttle';

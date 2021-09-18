@@ -2,7 +2,7 @@ import { Transformer } from './transformer';
 
 import type { TransformCallback } from 'node:stream';
 
-class Limit<T, U> extends Transformer<T, U> {
+class Limit<T> extends Transformer<T, T> {
   readonly limit: number;
   current: number;
 
@@ -17,12 +17,11 @@ class Limit<T, U> extends Transformer<T, U> {
     callback();
     this.current++;
     if (this.current === this.limit) {
-      this.push(null);
-      callback();
+      this.prev?.unpipe(this);
     }
   }
 }
 
-export function limit<T, U>(limit: number): Limit<T, U> {
+export function limit<T>(limit: number): Limit<T> {
   return new Limit(limit);
 }

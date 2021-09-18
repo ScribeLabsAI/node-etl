@@ -6,15 +6,14 @@ import type { DebouncedFunc } from 'lodash';
 
 class Throttle<T> extends Transformer<T, T> {
   buffer: T[];
-  throttled: DebouncedFunc<(callback: TransformCallback) => void>;
+  throttled: DebouncedFunc<(callback?: TransformCallback) => void>;
   constructor(delay: number) {
     super();
     this.buffer = [];
     this.throttled = _throttle(
-      (callback: TransformCallback) => {
-        this.push(this.buffer.splice(0, 1));
-        console.log(new Date());
-        callback();
+      (callback?: TransformCallback) => {
+        if (this.buffer.length > 0) this.push(this.buffer.splice(0, 1)[0]!);
+        if (callback) callback();
       },
       delay,
       { leading: true }
@@ -24,6 +23,11 @@ class Throttle<T> extends Transformer<T, T> {
   override _transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {
     this.buffer.push(chunk);
     this.throttled(callback);
+  }
+
+  override _flush(callback: TransformCallback) {
+    while (this.buffer.length > 0) this.throttled();
+    callback();
   }
 }
 

@@ -3,11 +3,22 @@ import { Transformer } from './transformer';
 import type { TransformCallback, Writable } from 'node:stream';
 
 class Fanout<T> extends Transformer<T, T> {
-  readonly outputs: Writable[];
+  outputs: Writable[];
 
   constructor(outputs: Writable[]) {
     super();
     this.outputs = outputs;
+  }
+
+  override unpipe(dest?: Writable): this {
+    if (dest) {
+      const ind = this.outputs.findIndex((v) => v === dest);
+      if (ind !== -1) this.outputs.splice(ind, 1);
+      dest.end();
+    } else {
+      this.outputs.forEach((o) => o.end());
+    }
+    return this;
   }
 
   override _transform(chunk: T, _encoding: BufferEncoding, callback: TransformCallback) {

@@ -1,3 +1,3 @@
 export * from './extractor';
-export * from './fromCSV';
+export * from './fromFile';
 export * from './fromIterable';
