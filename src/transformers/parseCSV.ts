@@ -3,7 +3,7 @@ import { Transformer } from '.';
 
 import type { Parser } from 'csv-parse';
 
-class FromCSV<T extends Record<string, unknown>> extends Transformer<string, T> {
+class ParseCSV<T extends Record<string, unknown>> extends Transformer<string, T> {
   readonly parser: Parser;
   constructor(delimiter: string) {
     super(true);
@@ -20,6 +20,6 @@ class FromCSV<T extends Record<string, unknown>> extends Transformer<string, T> 
   }
 }
 
-export function fromCSV<T extends Record<string, unknown>>(delimiter = ','): FromCSV<T> {
-  return new FromCSV(delimiter);
+export function parseCSV<T extends Record<string, unknown>>(delimiter = ','): ParseCSV<T> {
+  return new ParseCSV(delimiter);
 }

@@ -10,7 +10,7 @@ class ConsoleWriter<T> extends Loader<T> {
     _encoding: BufferEncoding,
     callback: (error?: Error | null) => void
   ): void {
-    console.log(chunk);
+    console.log(Buffer.isBuffer(chunk) ? chunk.toString('utf8').trim() : chunk);
     callback();
   }
 }

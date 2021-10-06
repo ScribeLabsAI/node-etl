@@ -18,7 +18,12 @@ class Limit<T> extends Transformer<T, T> {
     this.current++;
     if (this.current === this.limit) {
       this.prev?.unpipe(this);
+      this.unpipe(this.next);
     }
+  }
+
+  override _flush(callback: TransformCallback) {
+    callback();
   }
 }
 

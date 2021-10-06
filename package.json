@@ -1,5 +1,5 @@
 {
-  "name": "@scribelabs/etl",
+  "name": "@scribelabsai/etl",
   "version": "0.0.1",
   "description": "ETL (Extract, Transform, Load) library for Node.",
   "type": "module",

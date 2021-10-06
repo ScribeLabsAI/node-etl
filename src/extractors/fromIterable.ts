@@ -1,20 +1,29 @@
 import { Extractor } from './extractor';
 
 class FromIterable<T> extends Extractor<T> {
-  readonly iterable: Iterable<T>;
-  constructor(iterable: Iterable<T>) {
+  readonly iterable: Iterable<T> | AsyncGenerator<T, unknown, unknown>;
+  readonly skip: number;
+  count: number;
+
+  constructor(iterable: Iterable<T> | AsyncGenerator<T, unknown, unknown>, skip: number) {
     super();
     this.iterable = iterable;
+    this.skip = skip;
+    this.count = 0;
   }
 
-  override _read() {
-    for (const item of this.iterable) {
-      this.push(item);
+  override async _read() {
+    for await (const item of this.iterable) {
+      if (this.count < this.skip) this.count += 1;
+      else this.push(item);
     }
     this.push(null);
   }
 }
 
-export function fromFunction<T>(iterable: Iterable<T>): FromIterable<T> {
-  return new FromIterable(iterable);
+export function fromIterable<T>(
+  iterable: Iterable<T> | AsyncGenerator<T, unknown, unknown>,
+  skip = 0
+): FromIterable<T> {
+  return new FromIterable(iterable, skip);
 }

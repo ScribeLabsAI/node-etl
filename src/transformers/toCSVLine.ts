@@ -3,12 +3,12 @@ import { Transformer } from '.';
 
 import type { Stringifier } from 'csv-stringify';
 
-class ToCSVLine<T extends Record<string, unknown>> extends Transformer<T, string> {
+class ToCSVLine<T extends Record<string, unknown> | Array<unknown>> extends Transformer<T, Buffer> {
   readonly stringifier: Stringifier;
   constructor(columns: string[] = [], delimiter = ',') {
     super(true);
     this.stringifier = stringify({
-      header: true,
+      header: columns.length > 0,
       ...(columns.length > 0 ? { columns } : null),
       delimiter,
     });
@@ -19,7 +19,7 @@ class ToCSVLine<T extends Record<string, unknown>> extends Transformer<T, string
   }
 }
 
-export function toCSVLine<T extends Record<string, unknown>>(
+export function toCSVLine<T extends Record<string, unknown> | Array<unknown>>(
   columns: string[] = [],
   delimiter = ','
 ): ToCSVLine<T> {

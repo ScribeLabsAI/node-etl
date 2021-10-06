@@ -25,15 +25,20 @@ export abstract class Extractor<T> extends Readable {
     else super.destroy(err);
   }
 
-  override unpipe(_dest?: Writable): this {
-    if (this.proxied) this.proxy().unpipe();
-    else super.unpipe();
+  override unpipe(dest?: Writable): this {
+    if (this.proxied) this.proxy().unpipe(dest);
+    else super.unpipe(dest);
     this.next?.end();
     return this;
   }
 
   override _read(): void {
     this.push(null);
+  }
+
+  onEvent(signal: string, handler: (extractor: Extractor<T>) => void): this {
+    process.on(signal, () => handler(this));
+    return this;
   }
 
   chain(loader: Loader<T>): Loader<T>;
